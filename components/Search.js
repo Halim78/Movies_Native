@@ -17,6 +17,7 @@ constructor(props) {
     }
   }
 
+
   _loadFilms() {
     if (this.searchedText.length > 0) {
       this.setState({ isLoading: true })
@@ -35,15 +36,6 @@ constructor(props) {
     this.searchedText = text 
   }
 
-  _searchFilms() {
-    this.page = 0
-    this.totalPages = 0
-    this.setState({
-      films: [],
-    }, () => {
-        this._loadFilms()
-    })
-  }
 
   _displayLoading() {
     if (this.state.isLoading) {
@@ -54,6 +46,21 @@ constructor(props) {
       )
     }
   }
+
+  _searchFilms() {
+    this.page = 0
+    this.totalPages = 0
+    this.setState({
+      films: [],
+    }, () => {
+        this._loadFilms()
+    })
+  }
+
+  _displayDetailForFilm = (idFilm) => {
+    this.props.navigation.navigate("FilmDetail", {idFilm : idFilm})
+  }
+
 
   render() {
     return (
@@ -68,8 +75,8 @@ constructor(props) {
         <FlatList
           data={this.state.films}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => <FilmItem film={item}/>}
-          onEndReachedThreshold={0.5}
+          renderItem={({item}) => <FilmItem film={item} displayDetailForFilm={this._displayDetailForFilm} />}
+          onEndReachedThreshold={1}
           onEndReached={() => {
               if (this.state.films.length > 0 && this.page < this.totalPages) { // On vérifie également qu'on n'a pas atteint la fin de la pagination (totalPages) avant de charger plus d'éléments
                  this._loadFilms()
@@ -84,8 +91,7 @@ constructor(props) {
 
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1,
-    marginTop: 20
+    flex: 1
   },
   textinput: {
     marginLeft: 5,

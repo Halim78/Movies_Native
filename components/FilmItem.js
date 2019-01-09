@@ -1,14 +1,17 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import { typeAlias } from 'babel-types';
 import { getImages } from "../API/TMDB";
 
 
 class FilmItem extends React.Component {
     render() {
-        const film = this.props.film
+      const {film, displayDetailForFilm} = this.props
         return (
-          <View style={styles.main_container}>
+          <TouchableOpacity 
+          style={styles.main_container}
+          onPress = {() => displayDetailForFilm(film.id)}
+          >
             <Image
               style={styles.image}
               source={{uri: getImages(film.poster_path)}}
@@ -26,7 +29,7 @@ class FilmItem extends React.Component {
                 <Text style={styles.date_text}>{film.release_date}</Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )
       }
     }
@@ -45,7 +48,9 @@ const styles = StyleSheet.create({
     },
     content_container: {
       flex: 1,
-      margin: 5
+      margin: 5,
+      backgroundColor : 'aliceblue'
+
     },
     header_container: {
       flex: 3,
